@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Stock Market Playground</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+   
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
+  </head>
+
+  <body>
+            <h1 align="center">  Hello!!</h1>
+    <div class = "container" id = "outer-container">
+        
+         <div class =  "row">
+
+          <buttion ID = "upupup" name = "update">
+            update
+          </buttion>
+
+         </div>
+       
+        
+       
+         <div class = "row">
+             
+              <div calss = "col-md-12" ID = "listsss">
+              _____________________________________________________________________
+              </div> 
+          </div>
+
+          <div class = "row">
+              <div calss = "col-md-6" ID = "gg">
+              List
+              </div> 
+
+              <div calss = "col-md-6" ID = "list">
+              Memo
+              </div> 
+              
+              
+        
+
+
+
+
+        </div>
+       
+
+
+
+
+       
+    </div>
+
+  
+
+</body>
+
+
+<script type="text/javascript">
+
+           
+     window.onload = function(){
+           
+                      $.ajax({
+                       method : 'get',            
+   
+                       url: '/showShowList',
+               
+                   
+                       }).then(function(data){
+
+                         $("#gg").html(""); 
+                          for(let i = 0 ; i < data.length ; i++){
+                               var secondDiv = $("<div>");
+                               secondDiv.addClass(data[i].title); 
+                               secondDiv.attr("value", data[i]._id);
+                               var titleS = $("<p>"); 
+                               titleS.text(data[i].title);
+                               var linkS = $("<p>"); 
+                               linkS.text(data[i].link);
+                              // console.log(data.doc[i].check);
+                               secondDiv.append(titleS);
+                               secondDiv.append(linkS);
+                               var button = $("<button>");
+                               button.attr("id", "clickSave");
+                               button.addClass(data[i].title); 
+                               button.text("Save");
+                               secondDiv.append(button);
+                               var lineman = $("<p>");
+                               lineman.text("_________________________________________");
+                               secondDiv.append(lineman );
+
+                                $("#gg").append(secondDiv); 
+
+
+
+
+                          }; 
+
+                    
+    
+
+
+                      });      
+
+
+
+
+    
+
+
+            
+
+
+
+
+
+
+             
+              $.ajax({
+                   method : 'get',            
+   
+                   url: '/showComment',
+               
+                   
+                   }).then(function(data){
+                        
+                        console.log(data);
+                        var sendFs ={
+                           cm : data
+
+                        }
+
+                        console.log("first point");
+                        
+
+
+                        $.ajax({
+                         method : 'post',            
+     
+                          url: '/returnDB',
+                          
+                          data : sendFs
+                     
+                         }).then(function(data){
+                            console.log(data);
+                             $("#list").html("_________________________My storage__________________________");
+                           
+                           
+
+                            for(let i = 0 ; i < data.doc.length ; i++){
+                                  var secondDiv = $("<div>");
+                                  secondDiv.addClass("Lidt"); 
+                                  secondDiv.attr("value", data.doc[i]._id);
+                                  var titleS = $("<p>"); 
+                                  
+                                  titleS.text(data.doc[i].title);
+                                  var linkS = $("<p>"); 
+                                  
+                                  linkS.text(data.doc[i].link);
+                                  //console.log(data.doc[i].check);
+                                   if(data.doc[i].comment == null){
+                                       secondDiv.append(titleS);
+                                       secondDiv.append(linkS);
+
+                                       var newTextBoxDiv = $(document.createElement('div'))
+                                       .attr("id", 'TextBoxDiv' + i);
+
+                                       newTextBoxDiv.after().html('<label>Comment #'+ i + ' : </label>' + '<input type="text" name="textbox' + i + 
+                                       '" id="textbox' + i + '" value="" >');
+                                       secondDiv.append(newTextBoxDiv);
+                                        var button = $("<button>");
+                                        button.attr("id", "clickReciver");
+                                        button.addClass(data.doc[i].title); 
+                                       
+                                        button.attr("value", "textbox"+i );
+                                        button.text("Comment");
+                                        secondDiv.append(button);
+
+
+                                        var deletion = $("<button>");
+                                        deletion.attr("id", "eradication");
+                                        deletion.addClass(data.doc[i].title); 
+                                        deletion.attr("value", data.doc[i]._id);
+                                        deletion.text("delete");
+                                        secondDiv.append(deletion);
+                                        var lineman = $("<p>");
+                                         lineman.text("_________________________________________");
+                                        secondDiv.append(lineman );
+
+
+                                   }else{
+                                       console.log("start");
+                                       var coomnetMan = "";
+                                       for(let c = 0 ; c <data.com.length ; c++  ){
+                                         if (data.doc[i].comment == data.com[c]._id){
+                                          coomnetMan  = data.com[c].body;
+
+                                          } 
+                                        }
+                                      secondDiv.append(titleS);
+                                      secondDiv.append(linkS);
+                                      var CommentP = $("<p>");
+                                      var button = $("<button>");
+                                      CommentP.text(coomnetMan );
+                                      button.attr("id", "clickRemove");
+                                      button.addClass(data.doc[i].title); 
+                                      button.attr("value", "textbox"+i );
+                                      button.text("delete");
+                                      secondDiv.append(CommentP);
+                                      secondDiv.append(button);
+                                      var lineman = $("<p>");
+                                     lineman.text("_________________________________________");
+                                      secondDiv.append(lineman );
+
+                                  
+                                   }
+
+                               
+                                  $("#list").append(secondDiv); 
+
+
+                                    
+
+
+
+
+
+
+
+
+
+                            } 
+
+
+
+                          });
+
+                     
+                        
+
+                      
+                 
+                  
+                       }); 
+
+
+
+
+
+
+
+                        
+
+                      
+                 
+              
+     };
+     
+
+    $( document ).on( 'click', '#upupup', function () {
+
+
+           $.ajax({
+                   method : 'post',            
+   
+                   url: '/takeMan',
+               
+                   
+                   }).then(function(data){
+
+                    window.location.replace(data);
+
+
+                   }); 
+
+
+
+
+
+
+     }); 
+
+     $( document ).on( 'click', '#eradication', function () {
+           var keyMan = $(this).attr("value");
+           console.log(keyMan);
+           var sData ={
+             key : keyMan
+           }
+             
+           $.ajax({
+                   method : 'post',            
+   
+                   url: '/eradicate',
+                  
+                   data: sData
+                   
+                   }).then(function(data){
+
+                    window.location.replace(data);
+
+
+                   }); 
+          
+
+
+
+
+
+
+     }); 
+
+
+
+
+ $( document ).on( 'click', '#clickSave', function () {
+     var parentMan = $(this).parent();
+     var tit = $(this).attr("class");
+     var key = parentMan.attr("value");
+     //console.log(key);
+     var sendfile = {
+          keyMan : key,
+          titleS : tit
+          
+     } 
+
+      $.ajax({
+                   method : 'post',            
+   
+                   url: '/saveData',
+               
+                   data :  sendfile 
+
+                   }).then(function(datas){
+                       console.log(datas);
+                      var key = {
+                        keykey : datas.key
+                      }
+ 
+                      $.ajax({
+
+                             method : 'post',            
+             
+                             url: '/DelData',
+                         
+                             data :  key
+                              }).then(function(data){
+
+                                window.location.replace(data);
+
+
+                               }); 
+
+
+                       
+                  
+
+
+
+
+
+                   }); 
+
+
+
+
+
+ }); 
+
+
+    
+     $( document ).on( 'click', '#clickRemove', function () {
+         console.log("hi");
+         var tit = $(this).attr("class");
+         var parentMan = $(this).parent();
+         var key = parentMan.attr("value");
+         var sendfile = {
+          keyMan : key,
+          title : tit 
+
+         } 
+         console.log(sendfile);
+         $.ajax({
+                   method : 'post',            
+   
+                   url: '/removeProperty',
+               
+                   data :  sendfile 
+
+                   }).then(function(data){
+                       var titleMan = {
+                         title : data.val
+                       };
+
+                       $.ajax({
+                           method : 'post',            
+           
+                           url: '/remove',
+                          
+                           data : titleMan
+                         
+
+                           }).then(function(data){
+
+                              window.location.replace("/");
+                           }); 
+                                
+                                
+
+
+                   }); 
+
+     
+
+
+
+
+     }); 
+
+
+
+
+
+
+     $( document ).on( 'click', '#clickReciver', function () {
+
+        var titleid = $(this).attr("value");
+
+        var tit = $(this).attr("class");
+        console.log(titleid );
+        var parentMan = $(this).parent();
+        console.log(parentMan.attr("value") );
+        var sendComment = $('#'+titleid).val().trim();
+        //console.log(sendComment);
+        var key = parentMan.attr("value");
+        var sendfile = {
+              key : key,
+              title: tit,
+              comment : sendComment
+               
+
+        }
+        $.ajax({
+                   method : 'post',            
+   
+                   url: '/update',
+               
+                   data :  sendfile 
+
+                   }).then(function(data){
+                        window.location.replace(data);
+
+
+                   }); 
+
+       
+       
+     
+
+
+     });
+
+
+
+
+    
+ 
+
+
+</script>   
+
+</html>
+
+
+
+  
