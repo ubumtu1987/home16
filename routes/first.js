@@ -23,7 +23,8 @@ var Example = require("../mongoData.js");
 var TempMan = require("../Temper.js");
 
 
-mongoose.connect("mongodb://localhost/TestHome");
+// mongoose.connect("mongodb://localhost/TestHome");
+mongoose.connect("mongodb://heroku_z1lsp1cg:r82obmluhrlptl7k68mtf2lfhq@ds127802.mlab.com:27802/heroku_z1lsp1cg");
 var db = mongoose.connection;
 
 db.on("error", function(error) {
@@ -86,7 +87,7 @@ apiRouter.post("/returnDB", function(req, res) {
 });
 
 
-apiRouter.get("/showShowList", function(req, res) {
+apiRouter.get("/showshowlist", function(req, res) {
        
        
        TempMan.find({}, function(err, doc) {
