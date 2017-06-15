@@ -318,7 +318,7 @@ apiRouter.post('/saveData', function(req, res) {
 
 
  
-apiRouter.post("/takeMan" , function(req, res){
+apiRouter.post("/takeman" , function(req, res){
 
    TempMan.remove({}, function(err, doc) {
    if (err){
